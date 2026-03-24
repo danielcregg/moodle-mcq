@@ -1,136 +1,130 @@
-# Moodle MCQ Generator
+# Moodle MCQ
 
-A Claude Code skill that generates Moodle quiz questions in GIFT or XML format. Built for lecturers and educators who want to rapidly create well-structured quiz questions with proper feedback, categories, and difficulty balancing.
+A Claude Code skill for generating, reviewing, and improving Moodle quiz questions. Supports GIFT, Moodle XML, and Aiken formats. Built for lecturers and educators who create assessments for Moodle LMS.
 
 ## Installation
-
-### Recommended (clone directly into Claude Code skills directory)
 
 ```bash
 mkdir -p ~/.claude/skills
 git clone https://github.com/danielcregg/moodle-mcq.git ~/.claude/skills/moodle-mcq
 ```
 
-### Manual install
-
-```bash
-mkdir -p ~/.claude/skills/moodle-mcq
-cp SKILL.md ~/.claude/skills/moodle-mcq/
-```
-
 ## Usage
 
-In Claude Code, invoke the skill:
-
+### Create questions (standard difficulty)
 ```
 /moodle-mcq
 
 Generate 20 MCQ questions on Python lists and dictionaries for first-year students
 ```
 
-Or ask Claude directly:
-
+### Create challenging questions (60-75% target success rate)
 ```
-Create a Moodle quiz with 10 Java OOP questions covering inheritance and polymorphism, medium difficulty
+/moodle-mcq challenging
+
+Generate 15 hard questions on Java OOP covering inheritance and polymorphism
 ```
 
-### Specify format
+### Review and improve existing questions
+```
+/moodle-mcq review
 
+[paste your existing questions here]
+```
+
+### Specify output format
 ```
 /moodle-mcq
 
-Generate 15 questions on SQL joins in Moodle XML format with tags
+Generate 10 questions on SQL joins in Moodle XML format with syntax highlighting
 ```
+
+## Three Modes
+
+| Mode | Use For | Target Success Rate |
+|------|---------|-------------------|
+| **Create Standard** | General quizzes, revision, formative assessment | 75-85% |
+| **Create Challenging** | Exams, summative assessment, advanced students | 60-75% |
+| **Review** | Improving existing MCQs — fix weak distractors, balance lengths, remove lecture references | N/A |
+
+## Three Output Formats
+
+| Format | Tokens per 10 Questions | Best For |
+|--------|------------------------|----------|
+| **GIFT** (default) | ~550 | Standard quizzes without images |
+| **Moodle XML** | ~3,500 | Syntax-highlighted code, images, tags |
+| **Aiken** | ~300 | Quick review output |
+
+## Key Features
+
+### Question Quality
+- **Self-contained stems** — no references to lectures or slides, all code included in questions
+- **Plausible distractors** — based on real misconceptions, not random noise
+- **Answer length balance** — enforces 15/15/70 distribution (shortest/longest/middle) to prevent pattern exploitation
+- **Bloom's taxonomy coverage** — questions span remember through create levels
+
+### Challenging Mode
+- 5 distractor design strategies (overcorrection, outdated practice, wrong context, incomplete solution, reasonable misunderstanding)
+- Gradients of correctness — options range from completely right to subtly wrong
+- Tests judgment and trade-offs, not just recall
+- Scenario-based questions with real-world constraints
+
+### Review Mode
+- Difficulty assessment with success rate estimation
+- Weak distractor identification (throwaway options, extreme language, length imbalance)
+- 5 distractor replacement techniques
+- Lecture reference removal
+- Length rebalancing
+
+### Code Questions
+- Java syntax highlighting with inline CSS (blue keywords, green numbers, red strings)
+- Python syntax highlighting with color scheme
+- GIFT special character escaping for programming questions
+- Complete code always included in question stem
+
+### Moodle Compatibility
+- Critical `<name>` tag fix (prevents import errors)
+- No penalty tags (omitted entirely)
+- Proper CDATA sections
+- Category structure with `$course$/Category Name`
+- `shuffleanswers=true`, `answernumbering=abc`
 
 ## Supported Question Types
 
-| Type | GIFT | XML | Example |
-|------|------|-----|---------|
-| Multiple choice (single answer) | Yes | Yes | "What is the output of...?" |
-| Multiple choice (multiple answers) | Yes | Yes | "Select all that apply..." |
-| True/False | Yes | Yes | "Python is a compiled language." |
-| Short answer | Yes | Yes | "What keyword declares a variable in Java?" |
-| Numerical | Yes | Yes | "What is 2^10?" |
-| Matching | Yes | Yes | "Match the term to its definition" |
-| Cloze / Fill-in-the-blank | Yes | Yes | "The ___ keyword creates a loop" |
-| Calculated | No | Yes | "What is {a} + {b}?" with random values |
-| Drag and drop | No | Yes | Drag items onto an image |
-| Essay | Partial | Yes | Open-ended response |
+| Type | GIFT | XML | Aiken |
+|------|------|-----|-------|
+| Multiple choice (single answer) | Yes | Yes | Yes |
+| Multiple choice (multiple answers) | Yes | Yes | No |
+| True/False | Yes | Yes | No |
+| Short answer | Yes | Yes | No |
+| Numerical | Yes | Yes | No |
+| Matching | Yes | Yes | No |
+| Cloze / Fill-in-the-blank | Yes | Yes | No |
+| Calculated | No | Yes | No |
+| Drag and drop | No | Yes | No |
 
-## Why GIFT Format?
+## Review Document
 
-GIFT is the default because it uses **~6x fewer tokens** than Moodle XML for the same questions:
-
-| Metric (10-question quiz) | GIFT | Moodle XML |
-|---------------------------|------|------------|
-| Approximate tokens | ~550 | ~3,500 |
-| Lines of text | ~70 | ~450 |
-
-This means you get **6x more questions per dollar** of AI usage. GIFT covers ~90% of typical quiz needs (MCQ, T/F, short answer, matching, numerical).
-
-**Use XML when you need**: embedded images, question tags, custom penalties, shuffle control, general feedback, calculated questions, or drag-and-drop.
-
-## Features
-
-- **Per-answer feedback** - Explains why each option is correct or incorrect
-- **Categories** - Organizes questions by module/topic for Moodle's question bank
-- **Difficulty balancing** - Mix of easy (30%), medium (50%), hard (20%) based on Bloom's taxonomy
-- **Code-aware** - Properly escapes special characters in programming questions
-- **Plausible distractors** - Wrong answers based on real misconceptions, not random noise
-- **Both formats** - GIFT for efficiency, XML for full feature set
-
-## Bloom's Taxonomy Coverage
-
-Questions are generated across cognitive levels:
-
-| Level | % of Quiz | Style |
-|-------|-----------|-------|
-| Remember | ~15% | Recall definitions, syntax |
-| Understand | ~15% | Explain concepts, trace code |
-| Apply | ~25% | Use knowledge in new scenarios |
-| Analyze | ~25% | Find errors, compare approaches |
-| Evaluate | ~10% | Judge efficiency, best practices |
-| Create | ~10% | Complete code, design solutions |
-
-## Examples
-
-### Python MCQ (GIFT format)
-
-```
-$CATEGORY: Programming/Python/Data Types
-
-::Python List vs Tuple::What is the key difference between a list and a tuple in Python?{
-=Lists are mutable, tuples are immutable#Correct! Lists can be modified after creation while tuples cannot.
-~Lists use square brackets, tuples use parentheses#Syntax differs, but the key functional difference is mutability.
-~Lists can store multiple types, tuples cannot#Both can store mixed data types.
-~Tuples are faster but have no other difference#Tuples are slightly faster, but immutability is the key difference.
-}
-```
-
-### Java MCQ (GIFT format)
-
-```
-$CATEGORY: Programming/Java/OOP
-
-::Java Inheritance Keyword::Which keyword is used to inherit from a parent class in Java?{
-=extends#Correct! A class uses 'extends' to inherit from another class.
-~implements#'implements' is used for interfaces, not class inheritance.
-~inherits#There is no 'inherits' keyword in Java.
-~super#'super' calls the parent constructor or methods, not for declaring inheritance.
-}
-```
+Every generation includes a review document with:
+- Length distribution summary table
+- Per-question length annotations (SHORTEST/MIDDLE/LONGEST)
+- Correct answers in bold
+- Category organization
+- Difficulty mode used
 
 ## Importing into Moodle
 
-### GIFT files
 1. Go to your Moodle course
 2. Navigate to **Question bank** > **Import**
-3. Select **GIFT format**
-4. Upload your `.gift` file
+3. Select your format (GIFT, Moodle XML, or Aiken)
+4. Upload the file
 5. Click **Import**
 
-### XML files
-1. Same steps, select **Moodle XML format** at step 3
+## Version History
+
+- **v3.0** (2026-03-24): Major merge — combined 4 skills (moodle-mcq-creator, hard-questions, mcq-reviewer-improver, mcq-reviewer-skill) into single skill with 3 modes. Added GIFT and Aiken format support. Added Python syntax highlighting. Published to GitHub.
+- **v2.x** (2025-2026): Individual skills for standard questions, hard questions, and reviewing
+- **v1.x** (2025): Initial skill for AI Assisted Programming module
 
 ## Requirements
 
