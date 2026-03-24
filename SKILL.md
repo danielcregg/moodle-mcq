@@ -1,6 +1,6 @@
 ---
 name: moodle-mcq
-version: 2.0.0
+version: 3.0.0
 description: |
   Generate, review, and improve Moodle quiz questions. Supports GIFT format (compact,
   ~6x fewer tokens) and Moodle XML format (full features with syntax highlighting).
