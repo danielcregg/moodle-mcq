@@ -7,7 +7,8 @@
 <p align="center">
   <a href="https://github.com/danielcregg/claude-code-skill-moodle-mcq/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/Version-3.1.0-green.svg" alt="Version 3.1.0">
-  <img src="https://img.shields.io/badge/Platform-Claude%20Code-blueviolet.svg" alt="Platform: Claude Code">
+  <img src="https://img.shields.io/badge/Claude%20Code-blueviolet.svg" alt="Claude Code">
+  <img src="https://img.shields.io/badge/Claude%20Desktop-blueviolet.svg" alt="Claude Desktop">
   <img src="https://img.shields.io/badge/Moodle-4.x%20Compatible-orange.svg" alt="Moodle 4.x Compatible">
   <img src="https://img.shields.io/badge/Formats-GIFT%20%7C%20XML%20%7C%20Aiken-informational.svg" alt="Formats: GIFT | XML | Aiken">
 </p>
@@ -23,7 +24,7 @@
 ```bash
 # Install
 mkdir -p ~/.claude/skills
-git clone https://github.com/danielcregg/claude-code-skill-moodle-mcq.git ~/.claude/skills/moodle-mcq
+git clone https://github.com/danielcregg/moodle-mcq.git ~/.claude/skills/moodle-mcq
 
 # Use in Claude Code
 /moodle-mcq
@@ -343,34 +344,42 @@ a list and a tuple in Python?{
 
 ## Compatibility
 
-| Platform | Supported |
-|----------|:---------:|
-| Claude Code (CLI) | Yes |
-| Moodle 4.x | Yes |
-| Moodle 3.x | Yes |
-| Windows / macOS / Linux | Yes |
+| Platform | Supported | How |
+|----------|:---------:|-----|
+| Claude Code (CLI) | Yes | Install as skill, invoke with `/moodle-mcq` |
+| Claude Desktop | Yes | Add as skill via Settings > Skills |
+| Moodle 4.x | Yes | Import generated GIFT/XML/Aiken files |
+| Moodle 3.x | Yes | Import generated GIFT/XML/Aiken files |
+| Windows / macOS / Linux | Yes | All platforms supported |
 
 ---
 
 ## Installation
 
-### Option 1: Git Clone (recommended)
+### Claude Code (CLI)
 
 ```bash
 mkdir -p ~/.claude/skills
-git clone https://github.com/danielcregg/claude-code-skill-moodle-mcq.git ~/.claude/skills/moodle-mcq
+git clone https://github.com/danielcregg/moodle-mcq.git ~/.claude/skills/moodle-mcq
 ```
 
-### Option 2: Manual Download
+Verify: type `/moodle-mcq` in Claude Code — if the skill loads, you are good to go.
+
+### Claude Desktop
+
+1. Open Claude Desktop
+2. Go to **Settings** > **Skills**
+3. Click **Add Skill** or **Import**
+4. Point it to the `SKILL.md` file from this repo (download it or clone the repo first)
+
+Alternatively, create a new **Project** and paste the contents of `SKILL.md` into the project's custom instructions.
+
+### Manual Download
 
 Download `SKILL.md` from this repo and place it at:
 ```
 ~/.claude/skills/moodle-mcq/SKILL.md
 ```
-
-### Verify Installation
-
-In Claude Code, type `/moodle-mcq` — if the skill loads, you are good to go.
 
 ---
 
