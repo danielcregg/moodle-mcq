@@ -367,12 +367,15 @@ Verify: type `/moodle-mcq` in Claude Code — if the skill loads, you are good t
 
 ### Claude Desktop
 
-1. Open Claude Desktop
-2. Go to **Settings** > **Skills**
-3. Click **Add Skill** or **Import**
-4. Point it to the `SKILL.md` file from this repo (download it or clone the repo first)
+1. Download `SKILL.md` from this repo (or download the repo as a `.zip`)
+2. Open Claude Desktop
+3. Go to **Settings** > **Skills**
+4. Click **Upload skill**
+5. Drag and drop the `SKILL.md` file, or the `.zip` file containing it
 
-Alternatively, create a new **Project** and paste the contents of `SKILL.md` into the project's custom instructions.
+**File requirements:**
+- `.md` file must contain skill name and description formatted in YAML frontmatter
+- `.zip` or `.skill` file must include a `SKILL.md` file
 
 ### Manual Download
 
