@@ -6,7 +6,7 @@ A Claude Code skill for generating, reviewing, and improving Moodle quiz questio
 
 ```bash
 mkdir -p ~/.claude/skills
-git clone https://github.com/danielcregg/moodle-mcq.git ~/.claude/skills/moodle-mcq
+git clone https://github.com/danielcregg/claude-code-skill-moodle-mcq.git ~/.claude/skills/moodle-mcq
 ```
 
 ## Usage
