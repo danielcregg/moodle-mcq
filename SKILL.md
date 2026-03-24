@@ -1,10 +1,10 @@
 ---
 name: moodle-mcq
-version: 3.0.0
+version: 3.1.0
 description: |
   Generate, review, and improve Moodle quiz questions. Supports GIFT format (compact,
   ~6x fewer tokens) and Moodle XML format (full features with syntax highlighting).
-  Three modes: create (standard/challenging difficulty), review (improve existing MCQs).
+  Four modes: create (easy/standard/challenging difficulty), review (improve existing MCQs).
   Handles MCQ, true/false, short answer, matching, numerical, and cloze questions.
   Enforces answer length balance (15/15/70), self-contained stems, plausible distractors,
   and proper Moodle XML structure including the critical <name> tag fix.
@@ -24,13 +24,14 @@ You are a Moodle quiz question generator and reviewer for lecturers and educator
 
 ## Modes
 
-This skill operates in three modes. Ask the user which they want, or default to **create standard**.
+This skill operates in four modes. Ask the user which they want, or default to **create standard**.
 
-| Mode | Command | Purpose |
-|------|---------|---------|
-| **Create Standard** | `/moodle-mcq` or `/moodle-mcq create` | Generate questions with 75-85% expected success rate |
-| **Create Challenging** | `/moodle-mcq challenging` | Generate questions with 60-75% expected success rate |
-| **Review** | `/moodle-mcq review` | Review and improve existing MCQs |
+| Mode | Command | Purpose | Target Success Rate |
+|------|---------|---------|-------------------|
+| **Create Easy** | `/moodle-mcq easy` | Revision quizzes, formative assessment, confidence building | 85-95% |
+| **Create Standard** | `/moodle-mcq` or `/moodle-mcq create` | General assessment, balanced conceptual questions | 75-85% |
+| **Create Challenging** | `/moodle-mcq challenging` | Exams, summative assessment, tests judgment and trade-offs | 60-75% |
+| **Review** | `/moodle-mcq review` | Review and improve existing MCQs | N/A |
 
 ## Output Formats
 
@@ -185,6 +186,52 @@ Use the exact terms from the course materials consistently throughout the questi
 - Maintain original question numbering across drafts
 - Keep A-D option order stable unless explicitly asked to reorder
 - When revising, only adjust wording/length, not position
+
+---
+
+## Easy Mode: Difficulty Guidelines
+
+Only apply this section when the user requests **easy** difficulty.
+
+### Target Performance Metrics
+- **Target**: 85-95% class average
+- **Purpose**: Revision quizzes, formative assessment, confidence building, study aids
+
+### Easy Mode Question Design
+
+**1. Focus on Recall and Basic Understanding**
+- Test definitions, terminology, and single-concept recall
+- "What is X?", "Which keyword does Y?", "What does Z stand for?"
+- Bloom's taxonomy levels: primarily Remember and Understand
+
+**2. Distractors Should Be Clearly Wrong (But Not Absurd)**
+- Wrong options should be from the same domain but obviously incorrect to someone who studied
+- One distractor can be from a related but different topic
+- Distractors should still be real terms — not jokes or unrelated domains
+- A student who attended lectures and did basic revision should get these right
+
+**3. Keep Stems Simple and Direct**
+- Short, clear question stems
+- No scenarios, trade-offs, or multi-layered concepts
+- One concept per question
+- No code tracing or debugging (save that for standard/challenging)
+
+**4. Example Easy Question**
+```
+Which keyword is used to define a class in Java?
+
+A) class           <-- correct
+B) struct
+C) define
+D) object
+```
+Why easy: tests single-fact recall, wrong options are real keywords from other languages, no ambiguity.
+
+**5. Easy Mode Still Requires**
+- Self-contained stems (no lecture references)
+- Answer length balancing (15/15/70 rule still applies)
+- Plausible distractors (no absurd options)
+- Proper formatting and categories
 
 ---
 
@@ -573,7 +620,7 @@ Ask the user for:
 - Category names
 - Lecture materials (slides, notes, or topic outlines)
 - Any specific learning objectives to target
-- **Difficulty mode**: standard or challenging (default: standard)
+- **Difficulty mode**: easy, standard, or challenging (default: standard)
 - **Output format**: GIFT, XML, or Aiken (default: GIFT)
 
 If lecture materials are in PowerPoint, extract with:
@@ -595,7 +642,8 @@ For each category:
 - Create 4 options per question with 1 correct answer
 - Ensure plausible distractors based on common errors
 - Distribute questions evenly across key topics within each category
-- If **challenging mode**: apply difficulty calibration guidelines
+- If **easy mode**: apply easy mode guidelines (recall-focused, simple stems)
+- If **challenging mode**: apply challenging mode guidelines (trade-offs, judgment)
 - Vary which position (A, B, C, D) contains the correct answer
 
 ### Step 4: Length Audit (CRITICAL)
@@ -630,7 +678,7 @@ Always generate a review document alongside the question file.
 ```markdown
 # [Module Name] - Quiz Questions Review
 
-## Difficulty Mode: [Standard / Challenging]
+## Difficulty Mode: [Easy / Standard / Challenging]
 ## Output Format: [GIFT / Moodle XML / Aiken]
 
 ## Length Distribution Summary
@@ -800,6 +848,13 @@ Before delivering, verify:
 - [ ] Mix of definition/process/application questions
 - [ ] Terminology consistent with course materials
 
+### Difficulty Calibration (Easy Mode)
+- [ ] Questions focus on recall and basic understanding (Remember/Understand levels)
+- [ ] Stems are short and direct — one concept per question
+- [ ] Distractors are clearly wrong to someone who studied, but still from the same domain
+- [ ] No code tracing, debugging, or multi-concept scenarios
+- [ ] Expected success rate: 85-95%
+
 ### Difficulty Calibration (Challenging Mode)
 - [ ] NO absurd distractors (unrelated domains, impossible scenarios)
 - [ ] All distractors are technically plausible requiring knowledge to eliminate
@@ -939,4 +994,5 @@ Include these with every generated file:
 - v2.1 (2025-12-03): XML tag docs fix, length distribution table in review docs
 - v2.2 (2026-02-12): Merged moodle-mcq-creator + hard-questions into single skill with difficulty modes
 - v2.3 (2026-02-12): Merged mcq-reviewer-improver + mcq-reviewer-skill into single reviewer
-- v3.0 (2026-03-24): **Major merge** — Combined all skills (creator, hard-questions, reviewer) into single `moodle-mcq` skill. Added GIFT format support (~6x fewer tokens than XML). Added Aiken format. Added Python syntax highlighting. Added GIFT escaping rules for programming questions. Three modes: create standard, create challenging, review. Published to GitHub.
+- v3.0 (2026-03-24): **Major merge** — Combined all skills (creator, hard-questions, reviewer) into single `moodle-mcq` skill. Added GIFT format support (~6x fewer tokens than XML). Added Aiken format. Added Python syntax highlighting. Added GIFT escaping rules for programming questions. Published to GitHub.
+- v3.1 (2026-03-24): Added Easy difficulty mode (85-95% success rate) for revision quizzes and formative assessment. Four modes: create easy, create standard, create challenging, review.

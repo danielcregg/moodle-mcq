@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/danielcregg/claude-code-skill-moodle-mcq/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-  <img src="https://img.shields.io/badge/Version-3.0.0-green.svg" alt="Version 3.0.0">
+  <img src="https://img.shields.io/badge/Version-3.1.0-green.svg" alt="Version 3.1.0">
   <img src="https://img.shields.io/badge/Platform-Claude%20Code-blueviolet.svg" alt="Platform: Claude Code">
   <img src="https://img.shields.io/badge/Moodle-4.x%20Compatible-orange.svg" alt="Moodle 4.x Compatible">
   <img src="https://img.shields.io/badge/Formats-GIFT%20%7C%20XML%20%7C%20Aiken-informational.svg" alt="Formats: GIFT | XML | Aiken">
@@ -32,11 +32,12 @@ Generate 20 MCQ questions on Python data structures for first-year students
 
 ---
 
-## Three Modes
+## Four Modes
 
 | Mode | Invoke With | What It Does | Target Success Rate |
 |------|------------|--------------|-------------------|
-| **Create Standard** | `/moodle-mcq` | Generate conceptual questions with plausible distractors | 75-85% |
+| **Create Easy** | `/moodle-mcq easy` | Revision quizzes, formative assessment, confidence building | 85-95% |
+| **Create Standard** | `/moodle-mcq` | Balanced conceptual questions with plausible distractors | 75-85% |
 | **Create Challenging** | `/moodle-mcq challenging` | Exam-grade questions testing judgment and trade-offs | 60-75% |
 | **Review & Improve** | `/moodle-mcq review` | Assess existing MCQs, fix weak distractors, rebalance lengths | N/A |
 
@@ -56,42 +57,63 @@ Generate 20 MCQ questions on Python data structures for first-year students
 
 ## Before & After
 
-### Create Mode: Standard vs Challenging
+### Create Mode: Easy vs Standard vs Challenging
 
 <table>
 <tr>
-<th width="50%">Standard (75-85% success rate)</th>
-<th width="50%">Challenging (60-75% success rate)</th>
+<th width="33%">Easy (85-95% success rate)</th>
+<th width="33%">Standard (75-85% success rate)</th>
+<th width="33%">Challenging (60-75% success rate)</th>
 </tr>
 <tr>
 <td>
 
 ```
-What keyword declares inheritance in Java?
+Which keyword defines a class
+in Java?
 
-A) extends          <-- correct
-B) implements
-C) inherits
-D) super
+A) class       <-- correct
+B) struct
+C) define
+D) object
 ```
 
-Tests: single-fact recall
+Tests: **single-fact recall**
+Distractors from other languages
 
 </td>
 <td>
 
 ```
-Your AI assistant generates a database query
-using string concatenation. It passes all tests.
-Which issue has highest priority?
+What keyword declares
+inheritance in Java?
 
-A) SQL injection from concatenation  <-- correct
-B) SELECT * exposes unnecessary PII
-C) Password needs timing-safe comparison
-D) Missing rate limiting enables brute force
+A) extends     <-- correct
+B) implements
+C) inherits
+D) super
 ```
 
-Tests: prioritization across **4 real security concerns**
+Tests: **conceptual understanding**
+Distractors are real Java keywords
+
+</td>
+<td>
+
+```
+Your AI generates a DB query
+using string concatenation.
+It passes all tests. Which
+issue has highest priority?
+
+A) SQL injection   <-- correct
+B) SELECT * exposes PII
+C) Timing-safe comparison
+D) Missing rate limiting
+```
+
+Tests: **prioritization** across
+4 real security concerns
 
 </td>
 </tr>
@@ -354,6 +376,14 @@ In Claude Code, type `/moodle-mcq` — if the skill loads, you are good to go.
 
 ## Usage Examples
 
+### Generate easy revision questions
+```
+/moodle-mcq easy
+
+Generate 10 easy revision questions on Python basics (variables, loops, functions)
+for students preparing for their first exam.
+```
+
 ### Generate a standard quiz from lecture slides
 ```
 /moodle-mcq
@@ -410,6 +440,7 @@ The skill uses `python -m markitdown lecture.pptx` to extract slide content when
 | Version | Date | Changes |
 |---------|------|---------|
 | **3.0.0** | 2026-03-24 | Major merge: combined 4 skills into one. Added GIFT + Aiken formats. Added Python syntax highlighting. Published to GitHub. |
+| **3.1.0** | 2026-03-24 | Added Easy difficulty mode (85-95% success rate) for revision quizzes and formative assessment. Four modes: easy, standard, challenging, review. |
 | 2.3 | 2026-02-12 | Merged reviewer skills into single `mcq-reviewer` |
 | 2.2 | 2026-02-12 | Merged creator skills with difficulty mode parameter |
 | 2.1 | 2025-12-03 | XML tag docs fix, length distribution tables |
